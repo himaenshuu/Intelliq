@@ -91,3 +91,31 @@ npm run client
 ## License
 
 MIT 
+
+## Flowchart
+
+quizcrack/
+├── client/                      # React Frontend
+│   ├── public/                  # Static files
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   └── manifest.json
+│   ├── src/                     # Source files
+│   │   ├── App.js               # Main application component
+│   │   ├── App.css              # Main styles
+│   │   ├── index.js             # Entry point
+│   │   └── index.css            # Global styles
+│   ├── package.json             # Frontend dependencies
+│   └── README.md                # Frontend documentation
+│
+├── server/                      # Node.js Backend
+│   ├── server.js                # Main server file
+│   ├── start.js                 # Application starter
+│   ├── package.json             # Backend dependencies
+│   ├── .env                     # Development environment variables
+│   ├── .env.production          # Production environment variables
+│   └── README.md                # Backend documentation
+│
+├── .gitignore                   # Git ignore file
+├── package.json                 # Root package.json
+└── README.md                    # Project documentation

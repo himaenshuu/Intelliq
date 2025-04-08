@@ -1,0 +1,117 @@
+.answer-display {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.answer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.answer-table td {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.answer-table tr:nth-child(even) {
+    background-color: var(--bg-color);
+}
+
+.answer-list {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.answer-list li {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+}
+
+.answer-paragraphs {
+    margin: 1rem 0;
+}
+
+.answer-paragraphs p {
+    margin: 0.75rem 0;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.answer-text {
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    white-space: pre-wrap;
+}
+
+/* Dark theme styles */
+[data-theme="dark"] .answer-table td {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .answer-table tr:nth-child(even) {
+    background-color: var(--bg-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .answer-display {
+        padding: 1rem;
+    }
+
+    .answer-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+.quiz-answers {
+    margin: 1rem 0;
+}
+
+.quiz-item {
+    margin-bottom: 1.5rem;
+}
+
+.quiz-question {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.quiz-answer {
+    color: var(--text-color);
+    margin-left: 1rem;
+    line-height: 1.6;
+}
+
+.quiz-separator {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* Dark theme styles */
+[data-theme="dark"] .quiz-question {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .quiz-answer {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .quiz-separator {
+    background-color: #444;
+}

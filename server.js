@@ -10,6 +10,7 @@ const sharp = require("sharp");
 const { createWorker } = require("tesseract.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const admin = require("firebase-admin");
 require("dotenv").config();
 
 const app = express();
@@ -20,7 +21,7 @@ const corsOptions = {
     origin:
         process.env.NODE_ENV === "production"
             ? process.env.FRONTEND_URL
-            : "http://localhost:5000",
+            : "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
 };
@@ -28,9 +29,46 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Import routes
+const pdfRoutes = require('./server/routes/pdfRoutes');
+const imageRoutes = require('./server/routes/imageRoutes');
+const textRoutes = require('./server/routes/textRoutes');
+const urlRoutes = require('./server/routes/urlRoutes');
+// const googleFormsRoutes = require('./server/routes/googleForms');
+
+// Use routes
+app.use('/api', pdfRoutes);
+app.use('/api', imageRoutes);
+app.use('/api', textRoutes);
+app.use('/api', urlRoutes);
+// app.use('/api/google-forms', googleFormsRoutes);
+
+// Add authentication middleware
+app.use((req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+        admin.auth().verifyIdToken(token)
+            .then(decodedToken => {
+                req.user = decodedToken;
+                next();
+            })
+            .catch(error => {
+                console.error('Error verifying token:', error);
+                res.status(401).json({ error: 'Unauthorized' });
+            });
+    } else {
+        next();
+    }
+});
+
 // Serve static files in production
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "client/build")));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
 }
 
 // Initialize Google AI
@@ -205,91 +243,6 @@ async function processImageWithGemini(imageBuffer, context = "") {
         console.error("Error processing image with Gemini:", error);
         throw new Error("Failed to process the image with Gemini. Please ensure the image is in a supported format (JPEG, PNG).");
     }
-}
-
-// Text processing route
-app.post("/api/process", async (req, res) => {
-    try {
-        const { text, context } = req.body;
-        if (!text) {
-            return res.status(400).json({ error: "Text is required" });
-        }
-
-        const result = await processWithGemini(text, context);
-        res.json({ result });
-    } catch (error) {
-        console.error("Error in text processing:", error);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// URL processing route
-app.post("/api/process-url", async (req, res) => {
-    try {
-        const { url, question, context } = req.body;
-        if (!url || !question) {
-            return res.status(400).json({ error: "URL and question are required" });
-        }
-
-        const result = await processURLWithGemini(url, question, context);
-        res.json({ result });
-    } catch (error) {
-        console.error("Error in URL processing:", error);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// PDF processing route
-app.post("/api/process-pdf", upload.single("file"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No PDF file uploaded" });
-        }
-
-        // Log file details for debugging
-        console.log("PDF file received:", {
-            originalname: req.file.originalname,
-            mimetype: req.file.mimetype,
-            size: req.file.size
-        });
-
-        const context = req.body.context || "";
-        const result = await processPDFWithGemini(req.file.buffer, context);
-        res.json({ result });
-    } catch (error) {
-        console.error("Detailed PDF processing error:", {
-            message: error.message,
-            stack: error.stack,
-            name: error.name
-        });
-        res.status(500).json({
-            error: "Error processing PDF. Please try again.",
-            details: error.message
-        });
-    }
-});
-
-// Image processing route
-app.post("/api/process-image", upload.single("file"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No image file uploaded" });
-        }
-
-        const context = req.body.context || "";
-        const result = await processImageWithGemini(req.file.buffer, context);
-        res.json({ result });
-    } catch (error) {
-        console.error("Error in image processing:", error);
-        res.status(500).json({ error: "Error processing image. Please try again." });
-    }
-});
-
-// Serve React app in production
-if (process.env.NODE_ENV === "production") {
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "client/build", "index.html"));
-    });
 }
 
 const PORT = process.env.PORT || 5000;
