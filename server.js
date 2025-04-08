@@ -19,7 +19,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const corsOptions = {
     origin: process.env.NODE_ENV === 'production'
         ? process.env.FRONTEND_URL
-        : 'http://localhost:3000',
+        : 'https://quizCrack.onrender.com',
     methods: ['GET', 'POST'],
     credentials: true
 };
