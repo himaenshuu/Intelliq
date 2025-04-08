@@ -81,41 +81,60 @@ async function processPDFWithGemini(pdfBuffer, context = '') {
 // Function to process with Gemini
 async function processWithGemini(text, context = '') {
     try {
+        if (!text || typeof text !== 'string') {
+            throw new Error('Invalid input text');
+        }
+
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
-        let prompt = SYSTEM_PROMPT + '\n\n';
-        if (context) {
-            prompt += `Context: ${context}\n\n`;
-        }
-        prompt += `Question: ${text}`;
+        // Create prompt with context
+        const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\n${text}`;
 
+        // Generate content
         const result = await model.generateContent(prompt);
         const response = await result.response;
         return response.text();
     } catch (error) {
         console.error('Error processing with Gemini:', error);
-        throw new Error('Failed to process with Gemini AI');
+        if (error.message.includes('API key')) {
+            throw new Error('Invalid or missing Google API key');
+        }
+        throw new Error('Failed to process the input. Please try again.');
     }
 }
 
 // Function to extract text from URL
 async function extractTextFromURL(url) {
     try {
+        // Validate URL format
+        try {
+            new URL(url);
+        } catch (e) {
+            throw new Error('Invalid URL format');
+        }
+
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
 
         // Remove script and style elements
         $('script, style').remove();
 
-        // Get text content
+        // Extract text from body
         const text = $('body').text()
-            .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+            .replace(/\s+/g, ' ')
             .trim();
+
+        if (!text) {
+            throw new Error('No text content found on the webpage');
+        }
 
         return text;
     } catch (error) {
-        console.error("Error extracting text from URL:", error);
-        throw error;
+        console.error('Error extracting text from URL:', error);
+        if (error.response) {
+            throw new Error(`Failed to fetch URL: ${error.response.status} ${error.response.statusText}`);
+        }
+        throw new Error('Failed to extract text from URL. Please check if the URL is accessible.');
     }
 }
 
@@ -140,15 +159,15 @@ async function processURLWithGemini(url, question, context = '') {
 }
 
 // Function to process image with Gemini
-async function processImageWithGemini(imageBuffer, question = "", context = "") {
+async function processImageWithGemini(imageBuffer, context = '') {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
         // Convert image buffer to base64
         const base64Image = imageBuffer.toString('base64');
 
-        // Create prompt with image and question
-        const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\nQuestion: ${question || "Please analyze this image and provide relevant information."}`;
+        // Create prompt with context
+        const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\nPlease analyze this image and provide relevant information.`;
 
         // Generate content with image
         const result = await model.generateContent([
@@ -165,7 +184,7 @@ async function processImageWithGemini(imageBuffer, question = "", context = "") 
         return response.text();
     } catch (error) {
         console.error('Error processing image with Gemini:', error);
-        throw new Error('Failed to process the image with Gemini');
+        throw new Error('Failed to process the image with Gemini. Please ensure the image is in a supported format (JPEG, PNG).');
     }
 }
 
@@ -202,18 +221,18 @@ app.post('/api/process-url', async (req, res) => {
 });
 
 // PDF processing route
-app.post('/api/process-pdf', upload.single('pdf'), async (req, res) => {
+app.post('/api/process-pdf', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ error: 'No PDF file provided' });
+            return res.status(400).json({ error: 'No PDF file uploaded' });
         }
 
-        const { context } = req.body;
+        const context = req.body.context || '';
         const result = await processPDFWithGemini(req.file.buffer, context);
         res.json({ result });
     } catch (error) {
         console.error('Error in PDF processing:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error processing PDF. Please try again.' });
     }
 });
 
