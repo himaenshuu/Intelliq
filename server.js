@@ -54,11 +54,23 @@ async function processPDFWithGemini(pdfBuffer, context = "") {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
+        // Validate PDF buffer
+        if (!pdfBuffer || !Buffer.isBuffer(pdfBuffer)) {
+            throw new Error("Invalid PDF buffer");
+        }
+
         // Convert PDF buffer to base64
         const base64PDF = pdfBuffer.toString("base64");
 
+        // Validate base64 string
+        if (!base64PDF || base64PDF.length === 0) {
+            throw new Error("Failed to convert PDF to base64");
+        }
+
         // Create prompt with context
         const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\nPlease analyze this PDF document and provide relevant information.`;
+
+        console.log("Sending PDF to Gemini...");
 
         // Generate content with PDF
         const result = await model.generateContent([
@@ -74,8 +86,12 @@ async function processPDFWithGemini(pdfBuffer, context = "") {
         const response = await result.response;
         return response.text();
     } catch (error) {
-        console.error("Error processing PDF with Gemini:", error);
-        throw new Error("Failed to process the PDF with Gemini. Please ensure the PDF is in a supported format.");
+        console.error("Detailed Gemini PDF processing error:", {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        throw new Error(`Failed to process the PDF with Gemini: ${error.message}`);
     }
 }
 
@@ -230,12 +246,26 @@ app.post("/api/process-pdf", upload.single("file"), async (req, res) => {
             return res.status(400).json({ error: "No PDF file uploaded" });
         }
 
+        // Log file details for debugging
+        console.log("PDF file received:", {
+            originalname: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size
+        });
+
         const context = req.body.context || "";
         const result = await processPDFWithGemini(req.file.buffer, context);
         res.json({ result });
     } catch (error) {
-        console.error("Error in PDF processing:", error);
-        res.status(500).json({ error: "Error processing PDF. Please try again." });
+        console.error("Detailed PDF processing error:", {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        res.status(500).json({
+            error: "Error processing PDF. Please try again.",
+            details: error.message
+        });
     }
 });
 
