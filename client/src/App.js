@@ -165,7 +165,7 @@ function AppContent() {
         <div className="app">
             <header className="app-header">
                 <div className="header-content">
-                    <h1>QuizCrack</h1>
+                    <h1>AI Quiz Solver</h1>
                     <div className="header-controls">
                         <div className="user-info">
                             <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
@@ -290,7 +290,7 @@ function AppContent() {
             </main>
 
             <footer className="app-footer">
-                <p>© 2025 QuizCrack. All rights reserved.</p>
+                <p>© 2024 AI Quiz Solver. All rights reserved.</p>
             </footer>
         </div>
     );

@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: quizCrack-backend
+    name: quizCrack
     env: node
-    buildCommand: npm install
+    buildCommand: npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -13,44 +13,4 @@ services:
         value: https://quizCrack.onrender.com
       - key: GOOGLE_API_KEY
         sync: false
-      - key: REACT_APP_FIREBASE_API_KEY
-        sync: false
-      - key: REACT_APP_FIREBASE_AUTH_DOMAIN
-        sync: false
-      - key: REACT_APP_FIREBASE_PROJECT_ID
-        sync: false
-      - key: REACT_APP_FIREBASE_STORAGE_BUCKET
-        sync: false
-      - key: REACT_APP_FIREBASE_MESSAGING_SENDER_ID
-        sync: false
-      - key: REACT_APP_FIREBASE_APP_ID
-        sync: false
-      - key: GOOGLE_CLIENT_ID
-        sync: false
-      - key: GOOGLE_CLIENT_SECRET
-        sync: false
-      - key: GOOGLE_REDIRECT_URI
-        value: https://quizCrack.onrender.com/auth/callback
-
-  - type: web
-    name: quizCrack-frontend
-    env: node
-    buildCommand: cd client && npm install && npm run build
-    startCommand: cd client && npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: REACT_APP_API_URL
-        value: https://quizCrack-backend.onrender.com
-      - key: REACT_APP_FIREBASE_API_KEY
-        sync: false
-      - key: REACT_APP_FIREBASE_AUTH_DOMAIN
-        sync: false
-      - key: REACT_APP_FIREBASE_PROJECT_ID
-        sync: false
-      - key: REACT_APP_FIREBASE_STORAGE_BUCKET
-        sync: false
-      - key: REACT_APP_FIREBASE_MESSAGING_SENDER_ID
-        sync: false
-      - key: REACT_APP_FIREBASE_APP_ID
-        sync: false 
+    autoDeploy: true 
