@@ -12,6 +12,8 @@ import {
     Chip,
     IconButton,
     Tooltip,
+    ThemeProvider,
+    createTheme,
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
@@ -61,9 +63,24 @@ function AppContent() {
         localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     }, [isDarkMode]);
 
+    const theme = createTheme({
+        palette: {
+            mode: isDarkMode ? 'dark' : 'light',
+            primary: {
+                main: isDarkMode ? '#90caf9' : '#1976d2',
+            },
+            secondary: {
+                main: isDarkMode ? '#f48fb1' : '#dc004e',
+            },
+            background: {
+                default: isDarkMode ? '#121212' : '#ffffff',
+                paper: isDarkMode ? '#1e1e1e' : '#ffffff',
+            },
+        },
+    });
+
     const toggleTheme = () => {
         setIsDarkMode(!isDarkMode);
-        document.documentElement.setAttribute('data-theme', !isDarkMode ? 'dark' : 'light');
     };
 
     const handleCopy = () => {
@@ -162,137 +179,139 @@ function AppContent() {
     }
 
     return (
-        <div className="app">
-            <header className="app-header">
-                <div className="header-content">
-                    <h1>AI Quiz Solver</h1>
-                    <div className="header-controls">
-                        <div className="user-info">
-                            <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
-                            <span className="user-name">{user.displayName}</span>
-                        </div>
-                        <div className="header-buttons">
-                            <button className="theme-toggle" onClick={toggleTheme}>
-                                {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-                            </button>
-                            <button onClick={logOut} className="logout-btn">Logout</button>
+        <ThemeProvider theme={theme}>
+            <div className="app">
+                <header className="app-header">
+                    <div className="header-content">
+                        <h1>quizCrack</h1>
+                        <div className="header-controls">
+                            <div className="user-info">
+                                <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
+                                <span className="user-name">{user.displayName}</span>
+                            </div>
+                            <div className="header-buttons">
+                                <IconButton onClick={toggleTheme} color="inherit">
+                                    {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                                </IconButton>
+                                <Button onClick={logOut} color="inherit">Logout</Button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            <main className="app-main">
-                <div className="main-container">
-                    <form onSubmit={handleSubmit} className="input-form">
-                        <div className="input-section">
-                            <div className="text-input-container">
-                                <textarea
-                                    className="input-field"
-                                    value={text}
-                                    onChange={(e) => {
-                                        setText(e.target.value);
-                                        setError("");
-                                    }}
-                                    placeholder="Enter your question here..."
-                                    rows={4}
-                                />
-                            </div>
-
-                            <div className="url-container">
-                                <input
-                                    type="url"
-                                    className="url-input"
-                                    value={url}
-                                    onChange={(e) => setUrl(e.target.value)}
-                                    placeholder="Enter URL (optional)"
-                                />
-                            </div>
-
-                            <div className="context-container">
-                                <textarea
-                                    className="context-field"
-                                    value={context}
-                                    onChange={(e) => {
-                                        setContext(e.target.value);
-                                        setError("");
-                                    }}
-                                    placeholder="Add any additional context (optional)..."
-                                    rows={2}
-                                />
-                            </div>
-
-                            <div className="file-upload-section">
-                                <div className="file-upload">
-                                    <input
-                                        type="file"
-                                        id="file-upload"
-                                        onChange={handleFileChange}
-                                        accept=".pdf,image/*"
+                <main className="app-main">
+                    <div className="main-container">
+                        <form onSubmit={handleSubmit} className="input-form">
+                            <div className="input-section">
+                                <div className="text-input-container">
+                                    <textarea
+                                        className="input-field"
+                                        value={text}
+                                        onChange={(e) => {
+                                            setText(e.target.value);
+                                            setError("");
+                                        }}
+                                        placeholder="Enter your question here..."
+                                        rows={4}
                                     />
-                                    <label htmlFor="file-upload" className="file-upload-label">
-                                        Choose File
-                                    </label>
-                                    {file && (
-                                        <span className="file-name">
-                                            Selected: {fileName}
-                                            <button
-                                                className="clear-file"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setFile(null);
-                                                    setFileName("");
-                                                }}
-                                            >
-                                                ×
-                                            </button>
-                                        </span>
-                                    )}
+                                </div>
+
+                                <div className="url-container">
+                                    <input
+                                        type="url"
+                                        className="url-input"
+                                        value={url}
+                                        onChange={(e) => setUrl(e.target.value)}
+                                        placeholder="Enter URL (optional)"
+                                    />
+                                </div>
+
+                                <div className="context-container">
+                                    <textarea
+                                        className="context-field"
+                                        value={context}
+                                        onChange={(e) => {
+                                            setContext(e.target.value);
+                                            setError("");
+                                        }}
+                                        placeholder="Add any additional context (optional)..."
+                                        rows={2}
+                                    />
+                                </div>
+
+                                <div className="file-upload-section">
+                                    <div className="file-upload">
+                                        <input
+                                            type="file"
+                                            id="file-upload"
+                                            onChange={handleFileChange}
+                                            accept=".pdf,image/*"
+                                        />
+                                        <label htmlFor="file-upload" className="file-upload-label">
+                                            Choose File
+                                        </label>
+                                        {file && (
+                                            <span className="file-name">
+                                                Selected: {fileName}
+                                                <button
+                                                    className="clear-file"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setFile(null);
+                                                        setFileName("");
+                                                    }}
+                                                >
+                                                    ×
+                                                </button>
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="submit-container">
+                                    <button
+                                        type="submit"
+                                        className="submit-button"
+                                        disabled={loading || (!text && !file && !url)}
+                                    >
+                                        {loading ? "Processing..." : "Submit"}
+                                    </button>
                                 </div>
                             </div>
+                        </form>
 
-                            <div className="submit-container">
-                                <button
-                                    type="submit"
-                                    className="submit-button"
-                                    disabled={loading || (!text && !file && !url)}
-                                >
-                                    {loading ? "Processing..." : "Submit"}
-                                </button>
+                        {loading && (
+                            <div className="loading-container">
+                                <CircularProgress />
+                                <p>Processing your request...</p>
                             </div>
-                        </div>
-                    </form>
+                        )}
 
-                    {loading && (
-                        <div className="loading-container">
-                            <CircularProgress />
-                            <p>Processing your request...</p>
-                        </div>
-                    )}
-
-                    {error && (
-                        <div className="error-message">
-                            {error}
-                        </div>
-                    )}
-
-                    {answer && (
-                        <div className="answer-section">
-                            <div className="answer-header">
-                                <h2>Answer</h2>
-                                <button onClick={handleCopy} className="copy-button">
-                                    {copied ? <CheckIcon /> : <ContentCopyIcon />}
-                                </button>
+                        {error && (
+                            <div className="error-message">
+                                {error}
                             </div>
-                            <AnswerDisplay answer={answer} />
-                        </div>
-                    )}
-                </div>
-            </main>
+                        )}
 
-            <footer className="app-footer">
-                <p>© 2024 AI Quiz Solver. All rights reserved.</p>
-            </footer>
-        </div>
+                        {answer && (
+                            <div className="answer-section">
+                                <div className="answer-header">
+                                    <h2>Answer</h2>
+                                    <button onClick={handleCopy} className="copy-button">
+                                        {copied ? <CheckIcon /> : <ContentCopyIcon />}
+                                    </button>
+                                </div>
+                                <AnswerDisplay answer={answer} />
+                            </div>
+                        )}
+                    </div>
+                </main>
+
+                <footer className="app-footer">
+                    <p>© 2025 quizCrack. All rights reserved.</p>
+                </footer>
+            </div>
+        </ThemeProvider>
     );
 }
 
