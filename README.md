@@ -54,7 +54,7 @@ npm run dev
 npm run client
 ```
 
-3. Open your browser and navigate to `http://localhost:3000`
+3. Open your browser and navigate to `https://quizcrack.onrender.com/`
 
 ## Usage
 
