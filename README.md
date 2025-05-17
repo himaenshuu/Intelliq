@@ -15,7 +15,7 @@ A web application that uses AI to solve quiz questions from various input source
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Google API key for Gemini AI
+- Google API key for Gemini AI-
 
 ## Setup
 
