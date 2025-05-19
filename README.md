@@ -19,7 +19,7 @@ A web application that uses AI to solve quiz questions from various input source
 
 ## Setup
 
-1. Clone the repository:
+1. Clone the repository:-
 ```bash
 git clone <repository-url>
 cd ai-quiz-solver
