@@ -75,7 +75,7 @@ npm run client
 
 ## Technologies Used
 
-- Frontend:
+- Frontend:-
   - React
   - Material-UI
   - React Dropzone
