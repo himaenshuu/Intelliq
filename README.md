@@ -81,7 +81,7 @@ npm run client
   - React Dropzone
   - Axios
 
-- Backend:-
+- Backend:
   - Node.js
   - Express
   - Multer
