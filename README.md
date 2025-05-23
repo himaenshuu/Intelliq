@@ -50,38 +50,3 @@ npm run client
 
 3. Open your browser and navigate to `https://quizcrack.onrender.com/`
 
-## Usage
-
-1. **Text Input**:
-   - Select the "Text" tab
-   - Enter your question in the text area
-   - Click "Get Answer"
-
-2. **PDF Input**:
-   - Select the "PDF" tab
-   - Drag and drop a PDF file or click to select
-   - The AI will process the PDF and provide an answer
-
-3. **Image Input**:
-   - Select the "Image" tab
-   - Drag and drop an image file or click to select
-   - The AI will analyze the image and provide an answer
-
-## Technologies Used
-
-- Frontend:-
-  - React
-  - Material-UI
-  - React Dropzone
-  - Axios
-
-- Backend:
-  - Node.js
-  - Express
-  - Multer
-  - PDF-parse
-  - Google Generative AI
-
-## License
-
-MIT 
