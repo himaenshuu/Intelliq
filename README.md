@@ -21,7 +21,6 @@ A web application that uses AI to solve quiz questions from various input source
 
 1. Clone the repository:-
 ```bash
-git clone <repository-url>
 cd ai-quiz-solver
 ```
 
@@ -35,11 +34,6 @@ npm install
 cd client
 npm install
 cd ..
-```
-
-4. Create a `.env` file in the root directory with your Google API key:
-```
-GOOGLE_API_KEY=your_api_key_here
 ```
 
 ## Running the Application
