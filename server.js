@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === "production") {
 // Initialize Google AI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-const SYSTEM_PROMPT = `You are an expert in answering technical quiz questions. Please provide a clear, concise, and well-structured answer to the following question. Avoid unnecessary explanation unless required. Use bullet points or short paragraphs if helpful.`;
+const SYSTEM_PROMPT = `You are an ai agent named 'Alex' who is expert in answering questions.You have been developed by Quizcrack organization. Please provide a clear, concise, and well-structured answer to the questions. Avoid unnecessary explanation unless required. Use bullet points and short paragraphs if helpful.`;
 
 // Function to convert PDF to base64
 async function convertPDFToBase64(pdfPath) {
@@ -135,28 +135,37 @@ async function processPDFWithGemini(pdfBuffer, context = "") {
 
 // Function to process with Gemini
 async function processWithGemini(text, context = "") {
-    try {
-        if (!text || typeof text !== "string") {
-            throw new Error("Invalid input text");
-        }
+  if (typeof text !== "string" || !text.trim()) {
+    throw new Error("Invalid input text");
+  }
+  try {
+    const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-lite",
+    generationConfig: {
+    temperature: 0.3,
+    topP: 1,
+    topK: 1,
+    maxOutputTokens: 1024,
+    stopSequences: ["\n\n"]
+  },
+ });
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+    const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\n${text.trim()}`;
 
-        // Create prompt with context
-        const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\n${text}`;
+    const { response } = await model.generateContent(prompt);
 
-        // Generate content
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        return response.text();
-    } catch (error) {
-        console.error("Error processing with Gemini:", error);
-        if (error.message.includes("API key")) {
-            throw new Error("Invalid or missing Google API key");
-        }
-        throw new Error("Failed to process the input. Please try again.");
+    return response.text();
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+
+    if (error.message?.includes("API key")) {
+      throw new Error("Invalid or missing Google API key.");
     }
+
+    throw new Error("Gemini processing failed. Please try again.");
+  }
 }
+
 
 // Function to extract text from URL
 async function extractTextFromURL(url) {
