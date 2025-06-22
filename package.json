@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "AI Quiz Solver Application",
     "main": "server.js",
+    "type":"module",
     "scripts": {
         "start": "node server.js",
         "build": "cd client && npm install && npm run build",

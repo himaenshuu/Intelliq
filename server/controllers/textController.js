@@ -1,5 +1,5 @@
-const { processWithGemini } = require('../services/geminiService');
-const { handleError } = require('../utils/errorHandler');
+import { processWithGemini } from '../services/geminiService';
+import { handleError } from '../utils/errorHandler';
 
 const processText = async (req, res) => {
     try {
@@ -15,6 +15,6 @@ const processText = async (req, res) => {
     }
 };
 
-module.exports = {
+export default {
     processText
 }; 

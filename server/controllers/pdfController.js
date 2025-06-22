@@ -1,5 +1,5 @@
-const { processPDFWithGemini } = require('../services/geminiService');
-const { handleError } = require('../utils/errorHandler');
+import { processPDFWithGemini } from '../services/geminiService';
+import { handleError } from '../utils/errorHandler';
 
 const processPDF = async (req, res) => {
     try {
@@ -15,6 +15,6 @@ const processPDF = async (req, res) => {
     }
 };
 
-module.exports = {
+export default {
     processPDF
 }; 

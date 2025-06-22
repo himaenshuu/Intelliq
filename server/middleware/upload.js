@@ -1,7 +1,7 @@
-const multer = require('multer');
-const path = require('path');
+import multer, { memoryStorage } from 'multer';
+import path from 'path';
 
-const storage = multer.memoryStorage();
+const storage = memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     // Accept PDF and image files
@@ -20,4 +20,4 @@ const upload = multer({
     }
 });
 
-module.exports = upload; 
+export default upload; 

@@ -1,5 +1,5 @@
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import { join } from 'path';
 
 // Get the path to npm
 const npmPath = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -13,7 +13,7 @@ const backend = spawn('node', ['server.js'], {
 // Start frontend server
 const frontend = spawn(npmPath, ['start'], {
     stdio: 'inherit',
-    cwd: path.join(__dirname, 'client'),
+    cwd: join(__dirname, 'client'),
     shell: true
 });
 

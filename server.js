@@ -1,17 +1,18 @@
-const express = require("express");
-const cors = require("cors");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const pdfParse = require("pdf-parse");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { PDFDocument } = require("pdf-lib");
-const sharp = require("sharp");
-const { createWorker } = require("tesseract.js");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const admin = require("firebase-admin");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import pdfParse from "pdf-parse";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { PDFDocument } from "pdf-lib";
+import sharp from "sharp";
+import { createWorker } from "tesseract.js";
+import axios from "axios";
+import cheerio from "cheerio";
+import admin from "firebase-admin";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -30,10 +31,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import routes
-const pdfRoutes = require("./server/routes/pdfRoutes");
-const imageRoutes = require("./server/routes/imageRoutes");
-const textRoutes = require("./server/routes/textRoutes");
-const urlRoutes = require("./server/routes/urlRoutes");
+const pdfRoutes = require("./server/routes/pdfRoutes").default;
+const imageRoutes = require("./server/routes/imageRoutes").default;
+const textRoutes = require("./server/routes/textRoutes").default;
+const urlRoutes = require("./server/routes/urlRoutes").default;
 // const googleFormsRoutes = require('./server/routes/googleForms');
 
 // Use routes
@@ -167,7 +168,6 @@ async function processWithGemini(text, context = "") {
     throw new Error("Gemini processing failed. Please try again.");
   }
 }
-
 
 // Function to extract text from URL
 async function extractTextFromURL(url) {

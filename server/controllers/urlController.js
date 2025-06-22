@@ -1,5 +1,5 @@
-const { processURLWithGemini } = require('../services/geminiService');
-const { handleError } = require('../utils/errorHandler');
+import { processURLWithGemini } from '../services/geminiService';
+import { handleError } from '../utils/errorHandler';
 
 const processURL = async (req, res) => {
     try {
@@ -15,6 +15,6 @@ const processURL = async (req, res) => {
     }
 };
 
-module.exports = {
+export default {
     processURL
 }; 
