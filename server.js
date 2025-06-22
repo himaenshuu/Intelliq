@@ -9,7 +9,7 @@ import { PDFDocument } from "pdf-lib";
 import sharp from "sharp";
 import { createWorker } from "tesseract.js";
 import axios from "axios";
-import cheerio from "cheerio";
+// import cheerio from "cheerio";
 import admin from "firebase-admin";
 import dotenv from "dotenv";
 dotenv.config();
@@ -80,6 +80,8 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 const SYSTEM_PROMPT = `You are an ai agent named 'Alex' who is expert in answering questions.You have been developed by Quizcrack organization. Please provide a clear, concise, and well-structured answer to the questions. Avoid unnecessary explanation unless required. Use bullet points and short paragraphs if helpful.`;
 
 // Function to convert PDF to base64
+
+/*
 async function convertPDFToBase64(pdfPath) {
   try {
     const pdfBytes = fs.readFileSync(pdfPath);
@@ -257,6 +259,8 @@ async function processImageWithGemini(imageBuffer, context = "") {
     );
   }
 }
+
+*/
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
