@@ -166,18 +166,6 @@ async function processWithGemini(text, context = "") {
 
     throw new Error("Gemini processing failed. Please try again.");
   }
-    const { response } = await model.generateContent(prompt);
-
-    return response.text();
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-
-    if (error.message?.includes("API key")) {
-      throw new Error("Invalid or missing Google API key.");
-    }
-
-    throw new Error("Gemini processing failed. Please try again.");
-  }
 }
 
 
