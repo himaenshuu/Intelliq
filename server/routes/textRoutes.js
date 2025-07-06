@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { processWithGemini } from "../utils/ai";
+import { processWithGemini } from "../utils/ai.js";
 
 router.post("/process", async (req, res) => {
   try {

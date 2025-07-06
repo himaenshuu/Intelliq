@@ -1,13 +1,13 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const config = require("../config/config");
+import express from "express";
+import cors from "cors";
+import path from "path";
+import config from "../config/config.js";
 
 // Import routes
-const pdfRoutes = require('../routes/pdfRoutes');
-const imageRoutes = require('../routes/imageRoutes');
-const textRoutes = require('../routes/textRoutes');
-const urlRoutes = require('../routes/urlRoutes');
+import pdfRoutes from '../routes/pdfRoutes.js';
+import imageRoutes from '../routes/imageRoutes.js';
+import textRoutes from '../routes/textRoutes.js';
+import urlRoutes from '../routes/urlRoutes.js';
 
 const app = express();
 
@@ -30,4 +30,4 @@ if (config.nodeEnv === "production") {
     });
 }
 
-module.exports = app; 
+export default app; 

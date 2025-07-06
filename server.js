@@ -31,11 +31,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import routes
-const pdfRoutes = require("./server/routes/pdfRoutes").default;
-const imageRoutes = require("./server/routes/imageRoutes").default;
-const textRoutes = require("./server/routes/textRoutes").default;
-const urlRoutes = require("./server/routes/urlRoutes").default;
-// const googleFormsRoutes = require('./server/routes/googleForms');
+import pdfRoutes from "./server/routes/pdfRoutes.js";
+import imageRoutes from "./server/routes/imageRoutes.js";
+import textRoutes from "./server/routes/textRoutes.js";
+import urlRoutes from "./server/routes/urlRoutes.js";
+// import googleFormsRoutes from './server/routes/googleForms.js';
 
 // Use routes
 app.use("/api", pdfRoutes);

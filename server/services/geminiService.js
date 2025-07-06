@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { extractTextFromURL } from "./urlService";
+import { extractTextFromURL } from "./urlService.js";
 import dotenv from "dotenv";
-require("dotenv").config();
+dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 

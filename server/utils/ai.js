@@ -1,5 +1,5 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const config = require("../config/config");
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import config from "../config/config.js";
 
 const genAI = new GoogleGenerativeAI(config.googleApiKey);
 
@@ -89,7 +89,7 @@ async function processImageWithGemini(imageBuffer, context = "") {
     }
 }
 
-module.exports = {
+export {
     processWithGemini,
     processPDFWithGemini,
     processImageWithGemini,

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { verifyEmailAccess, getFormResponses } from '../services/googleFormsService';
+import googleFormsService from '../services/googleFormsService.js';
 
 // Middleware to verify user authentication
 const verifyAuth = (req, res, next) => {
@@ -16,7 +16,7 @@ router.post('/verify-access', verifyAuth, async (req, res) => {
         const { formUrl } = req.body;
         const userEmail = req.user.email;
 
-        const result = await verifyEmailAccess(formUrl, userEmail);
+        const result = await googleFormsService.verifyEmailAccess(formUrl, userEmail);
         res.json(result);
     } catch (error) {
         console.error('Error verifying form access:', error);
@@ -30,7 +30,7 @@ router.get('/responses/:formId', verifyAuth, async (req, res) => {
         const { formId } = req.params;
         const userEmail = req.user.email;
 
-        const responses = await getFormResponses(formId, userEmail);
+        const responses = await googleFormsService.getFormResponses(formId, userEmail);
         res.json({ responses });
     } catch (error) {
         console.error('Error getting form responses:', error);

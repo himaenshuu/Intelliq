@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import multer, { memoryStorage } from "multer";
-import { processPDFWithGemini } from "../utils/ai";
+import { processPDFWithGemini } from "../utils/ai.js";
 
 const upload = multer({ storage: memoryStorage() });
 

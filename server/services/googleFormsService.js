@@ -1,5 +1,5 @@
-const { google } = require('googleapis');
-const { OAuth2Client } = require('google-auth-library');
+import { google } from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 
 class GoogleFormsService {
     constructor() {
@@ -75,4 +75,4 @@ class GoogleFormsService {
     }
 }
 
-module.exports = new GoogleFormsService(); 
+export default new GoogleFormsService(); 

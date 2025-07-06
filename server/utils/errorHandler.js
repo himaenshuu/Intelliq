@@ -14,6 +14,6 @@ function handleError(res, error, context) {
     });
 }
 
-module.exports = {
+export {
     handleError
 }; 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { processWithGemini } from "../utils/ai";
-import { extractTextFromURL } from "../utils/scraper";
+import { processWithGemini } from "../utils/ai.js";
+import { extractTextFromURL } from "../utils/scraper.js";
 
 router.post("/process-url", async (req, res) => {
   try {
