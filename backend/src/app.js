@@ -1,13 +1,18 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from 'url';
 import config from "../config/config.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Import routes
 import pdfRoutes from '../routes/pdfRoutes.js';
 import imageRoutes from '../routes/imageRoutes.js';
 import textRoutes from '../routes/textRoutes.js';
 import urlRoutes from '../routes/urlRoutes.js';
+
 
 const app = express();
 
@@ -20,12 +25,13 @@ app.use('/api', pdfRoutes);
 app.use('/api', imageRoutes);
 app.use('/api', textRoutes);
 app.use('/api', urlRoutes);
-
-// Serve static files in production
-if (config.nodeEnv === "production") {
+if (config.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../../client/build")));
+}
 
-    app.get('*', (req, res) => {
+// Place the catch-all route after all other routes
+if (config.NODE_ENV === "production") {
+    app.get('*', (_req, res) => {
         res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
     });
 }

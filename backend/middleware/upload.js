@@ -1,5 +1,4 @@
 import multer, { memoryStorage } from 'multer';
-import path from 'path';
 
 const storage = memoryStorage();
 

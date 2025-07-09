@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { processWithGemini } from "../utils/ai.js";
+import geminiService from "../services/geminiService.js";
 import { extractTextFromURL } from "../utils/scraper.js";
 
 router.post("/process-url", async (req, res) => {
@@ -17,9 +17,9 @@ router.post("/process-url", async (req, res) => {
 
     const webContent = await extractTextFromURL(url);
     const prompt = `Web Content: ${webContent}\n\nQuestion: ${question}`;
-    const result = await processWithGemini(prompt, context);
+    const result = await geminiService.processWithGemini(prompt, context);
 
-    res.json({ result });
+    res.json({ answer: result });
   } catch (error) {
     console.error("Error processing URL:", error);
     res.status(500).json({ error: error.message });

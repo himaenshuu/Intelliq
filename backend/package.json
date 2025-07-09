@@ -1,14 +1,12 @@
 {
-    "name": "ai-quiz-solver",
+    "name": "Intelliq",
     "version": "1.0.0",
-    "description": "AI Quiz Solver Application",
-    "main": "server.js",
-    "type":"module",
+    "description": "Backend server for AI Quiz Solver",
+    "main": "src/server.js",
+    "type": "module",
     "scripts": {
-        "start": "node server.js",
-        "build": "cd client && npm install && npm run build",
-        "dev": "node start.js",
-        "install-all": "npm install && cd client && npm install"
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
     },
     "dependencies": {
         "@google/generative-ai": "^0.2.1",
@@ -23,6 +21,9 @@
         "pdf-parse": "^1.1.1",
         "sharp": "^0.33.2",
         "tesseract.js": "^5.0.5"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.0"
     },
     "engines": {
         "node": ">=18.0.0"

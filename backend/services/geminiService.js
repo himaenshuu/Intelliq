@@ -1,24 +1,24 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { extractTextFromURL } from "./urlService.js";
+import { extractTextFromURL } from "../utils/scraper.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-const SYSTEM_PROMPT = `You are an ai agent named 'Alex' who is expert in answering questions.You have been developed by Quizcrack organization. Please provide a clear, concise, and well-structured answer to the questions. Avoid unnecessary explanation unless required. Use bullet points and short paragraphs if helpful.`;
+const SYSTEM_PROMPT = `Your name is 'Alex' who is expert in answering questions in any domain. You have been developed by Intelliq. You provide a clear, concise, and well-structured answer to the questions and often avoid unnecessary explanation unless required. Use bullet points and short paragraphs if it is helpful.`;
 
 function cleanGeminiText(text) {
   if (typeof text !== "string") return "";
 
   return text
     .replace(/\*/g, "") // Remove asterisks
-    .replace(/^#+\s?/gm, "") // Remove markdown headers
-    .replace(/\n{2,}/g, "\n\n") // Normalize blank lines
-    .replace(/^\s*[-•\d]+\.\s+/gm, "") // Clean bullet prefixes
+    // .replace(/^#+\s?/gm, "") // Remove markdown headers
+    .replace(/\n{2,}/g, "\n\n") // Normalize blank lines  -- the vertical gap is happening due to this*
+    // .replace(/^\s*[-•\d]+\.\s+/gm, "") // Clean bullet prefixes
     .replace(/&amp;/g, "&") // Decode basic HTML entities
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/```/g, "") // Remove code block markers
+    // .replace(/```/g, "") // Remove code block markers
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'") // Normalize smart quotes
     .trim(); // Final whitespace trim
@@ -32,11 +32,10 @@ async function processWithGemini(text, context = "") {
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash-lite",
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.6,
         topP: 1,
         topK: 1,
-        maxOutputTokens: 200,
-        stopSequences: ["\n\n"],
+        maxOutputTokens: 500,
       },
     });
     const prompt = `${SYSTEM_PROMPT}\n\nContext: ${context}\n\n${text}`;
@@ -57,11 +56,10 @@ async function processPDFWithGemini(pdfBuffer, context = "") {
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.6,
         topP: 1,
         topK: 1,
         maxOutputTokens: 1024,
-        stopSequences: ["\n\n"],
       },
     });
     const base64PDF = pdfBuffer.toString("base64");
@@ -92,11 +90,10 @@ async function processImageWithGemini(imageBuffer, context = "") {
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.7,
         topP: 1,
         topK: 1,
         maxOutputTokens: 1024,
-        stopSequences: ["\n\n"],
       },
     });
     const base64Image = imageBuffer.toString("base64");
@@ -125,13 +122,12 @@ async function processImageWithGemini(imageBuffer, context = "") {
 async function processURLWithGemini(url, question, context = "") {
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-lite",
+      model: "gemini-2.0-flash",
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.7,
         topP: 1,
         topK: 1,
         maxOutputTokens: 1024,
-        stopSequences: ["\n\n"],
       },
     });
     const webContent = await extractTextFromURL(url);

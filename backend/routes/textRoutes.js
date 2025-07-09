@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { processWithGemini } from "../utils/ai.js";
+import geminiService from "../services/geminiService.js";
 
 router.post("/process", async (req, res) => {
   try {
@@ -10,8 +10,8 @@ router.post("/process", async (req, res) => {
       return res.status(400).json({ error: "No text provided" });
     }
 
-    const result = await processWithGemini(text, context);
-    res.json({ result });
+    const result = await geminiService.processWithGemini(text, context);
+    res.json({ answer: result });
   } catch (error) {
     console.error("Error processing text:", error);
     res.status(500).json({ error: error.message });

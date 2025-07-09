@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-    Container,
-    Box,
-    Typography,
-    TextField,
     Button,
-    Paper,
     CircularProgress,
-    Alert,
-    Divider,
-    Chip,
     IconButton,
-    Tooltip,
     ThemeProvider,
     createTheme,
 } from "@mui/material";
-import { useDropzone } from "react-dropzone";
+// import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
@@ -113,12 +104,17 @@ function AppContent() {
         }
     };
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: { "application/pdf": [".pdf"], "image/*": [".png", ".jpg", ".jpeg"] },
-    });
+    // const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    //     onDrop,
+    //     accept: { "application/pdf": [".pdf"], "image/*": [".png", ".jpg", ".jpeg"] },
+    // });
 
     const handleSubmit = async (e) => {
+        console.log("=== FORM SUBMISSION START ===");
+        console.log("file:", file, "url:", url, "text:", text, "context:", context);
+        console.log("text.trim():", text.trim());
+        console.log("url && text.trim():", url && text.trim());
+        console.log("text.trim() only:", text.trim());
         e.preventDefault();
         setLoading(true);
         setError("");
@@ -128,34 +124,43 @@ function AppContent() {
             const formData = new FormData();
 
             if (file) {
+                console.log("Processing file upload...");
                 formData.append("file", file);
                 formData.append("context", context);
                 const endpoint = file.type === "application/pdf" ? "/api/process-pdf" : "/api/process-image";
                 result = await axios.post(endpoint, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
-            } else if (url && text.trim()) {
+            } else if (url) {
+                // If URL is provided but no question, use a default question
+                const question = text.trim() || "Summarize this page and provide key information";
+                console.log("Processing URL + question (auto-generated if needed)...");
+                console.log("Using question:", question);
                 result = await axios.post("/api/process-url", {
                     url: url,
-                    question: text,
+                    question: question,
                     context: context.trim(),
                 });
             } else if (text.trim()) {
+                console.log("Processing text only...");
                 result = await axios.post("/api/process", {
                     text: text,
                     context: context.trim(),
                 });
             } else {
+                console.log("No valid input found, throwing error...");
                 throw new Error("Please provide either a question, URL, or upload a file");
             }
 
-            setAnswer(result.data.result);
+            console.log("API call successful, setting answer...");
+            setAnswer(result.data.answer);
             setFileName(file ? file.name : text);
         } catch (error) {
             console.error("Error:", error);
             setError(error.response?.data?.error || error.message || "An error occurred");
         } finally {
             setLoading(false);
+            console.log("=== FORM SUBMISSION END ===");
         }
     };
 
@@ -183,7 +188,7 @@ function AppContent() {
             <div className="app">
                 <header className="app-header">
                     <div className="header-content">
-                        <h1>quizCrack</h1>
+                        <h1>Intelliq AI</h1>
                         <div className="header-controls">
                             <div className="user-info">
                                 <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
@@ -208,6 +213,7 @@ function AppContent() {
                                         className="input-field"
                                         value={text}
                                         onChange={(e) => {
+                                            console.log("Text field changed:", e.target.value);
                                             setText(e.target.value);
                                             setError("");
                                         }}
@@ -308,7 +314,7 @@ function AppContent() {
                 </main>
 
                 <footer className="app-footer">
-                    <p>© 2025 quizCrack. All rights reserved.</p>
+                    <p>© 2025 Intelliq. All rights reserved.</p>
                 </footer>
             </div>
         </ThemeProvider>
