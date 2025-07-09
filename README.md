@@ -6,6 +6,7 @@
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![Google AI](https://img.shields.io/badge/Google%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 </div>
 
@@ -65,7 +66,7 @@ IntelliQ is a **full-stack AI application** that intelligently analyzes and answ
 
 **Built with React, Node.js, and Google Gemini AI**
 
-[⭐ Star this repository](https://github.com/yourusername/intelliq)
+[⭐ Star this repository](https://github.com/himaenshuu/intelliq)
 
 </div>
 
