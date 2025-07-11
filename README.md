@@ -39,7 +39,7 @@ IntelliQ is a **full-stack AI application** that intelligently analyzes and answ
 
 ## 🎯 What Makes This Project Special
 
-### **For Freshers/Internships:**
+### **For Recruiters**
 - ✅ **Above Average Complexity** - Most freshers don't have AI integration experience
 - ✅ **Full-Stack Development** - Demonstrates both frontend and backend skills
 - ✅ **Modern Technologies** - Shows you're current with industry trends
