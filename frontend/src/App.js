@@ -80,35 +80,6 @@ function AppContent() {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const onDrop = async (acceptedFiles) => {
-        const file = acceptedFiles[0];
-        if (!file) return;
-
-        setLoading(true);
-        setError("");
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("context", context);
-
-        try {
-            const endpoint = file.type === "application/pdf" ? "/api/process-pdf" : "/api/process-image";
-            const response = await axios.post(endpoint, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            setAnswer(response.data.answer);
-        } catch (err) {
-            console.error("Error processing file:", err);
-            setError(err.response?.data?.error || "An error occurred while processing the file");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    //     onDrop,
-    //     accept: { "application/pdf": [".pdf"], "image/*": [".png", ".jpg", ".jpeg"] },
-    // });
-
     const handleSubmit = async (e) => {
         console.log("=== FORM SUBMISSION START ===");
         console.log("file:", file, "url:", url, "text:", text, "context:", context);
@@ -188,7 +159,7 @@ function AppContent() {
             <div className="app">
                 <header className="app-header">
                     <div className="header-content">
-                        <h1>Intelliq AI</h1>
+                        <h1>IntelliQ</h1>
                         <div className="header-controls">
                             <div className="user-info">
                                 <img src={user.photoURL} alt={user.displayName} className="user-avatar" />

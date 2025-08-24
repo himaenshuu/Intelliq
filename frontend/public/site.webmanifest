@@ -1,6 +1,6 @@
 {
-    "name": "AI Quiz Solver",
-    "short_name": "Quiz Solver",
+    "name": "IntelliQ - AI Content Analysis",
+    "short_name": "IntelliQ",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

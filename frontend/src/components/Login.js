@@ -16,8 +16,9 @@ function Login() {
     return (
         <div className="login-container">
             <div className="login-box">
-                <h1>AI Quiz Solver</h1>
-                <p>Sign in to access all features</p>
+                <h1>IntelliQ</h1>
+                <p>AI-Powered Content Analysis Platform</p>
+                <p>Analyze text, PDFs, images, and web content with AI</p>
                 <button onClick={handleGoogleSignIn} className="google-signin-btn">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
                     Sign in with Google
