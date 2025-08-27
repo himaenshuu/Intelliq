@@ -8,6 +8,7 @@ node_modules/
 
 # Production
 /client/build
+/frontend/build
 
 # Environment variables
 .env
