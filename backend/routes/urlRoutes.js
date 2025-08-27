@@ -2,17 +2,25 @@ import { Router } from "express";
 const router = Router();
 import geminiService from "../services/geminiService.js";
 import { extractTextFromURL } from "../utils/scraper.js";
+import { handleError } from "../utils/errorHandler.js";
 
 router.post("/process-url", async (req, res) => {
   try {
     const { url, question, context } = req.body;
 
-    if (!url) {
+    if (!url || !url.trim()) {
       return res.status(400).json({ error: "No URL provided" });
     }
 
-    if (!question) {
+    if (!question || !question.trim()) {
       return res.status(400).json({ error: "No question provided" });
+    }
+
+    // Basic URL validation
+    try {
+      new URL(url);
+    } catch (urlError) {
+      return res.status(400).json({ error: "Invalid URL format" });
     }
 
     const webContent = await extractTextFromURL(url);
@@ -21,8 +29,7 @@ router.post("/process-url", async (req, res) => {
 
     res.json({ answer: result });
   } catch (error) {
-    console.error("Error processing URL:", error);
-    res.status(500).json({ error: error.message });
+    handleError(res, error, "URL processing");
   }
 });
 
